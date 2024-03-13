@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.iwamotoraphael.todosimple.models.Task;
-import com.iwamotoraphael.todosimple.models.User;
 import com.iwamotoraphael.todosimple.models.User.UpdateUser;
 import com.iwamotoraphael.todosimple.services.TaskService;
 
