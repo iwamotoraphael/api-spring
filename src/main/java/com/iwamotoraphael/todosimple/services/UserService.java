@@ -41,9 +41,10 @@ public class UserService {
         return this.userRepository.save(updatedObj);
     }
 
+    @Transactional
     public void delete(Long id){
         this.taskRepository.deleteByUser_Id(id);
-        this.taskRepository.deleteById(id);
+        this.userRepository.deleteById(id);
     }
 }
  
