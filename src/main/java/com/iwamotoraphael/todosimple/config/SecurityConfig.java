@@ -45,7 +45,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-     @Bean
+    @Bean
     CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
             configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE"));
@@ -54,7 +54,6 @@ public class SecurityConfig {
             return source;
     }
 
-    //todo substituir por hash
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
