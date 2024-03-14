@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iwamotoraphael.todosimple.models.Task;
 import com.iwamotoraphael.todosimple.models.User;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
+import com.iwamotoraphael.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class TaskService {
@@ -23,10 +24,12 @@ public class TaskService {
     public Task findById(Long id){
         Optional<Task> task = this.taskRepository.findById(id);
 
-        return task.orElseThrow(() -> new RuntimeException("Tarefa de id: "+id+" não foi encontrado."));
+        return task.orElseThrow(() -> new ObjectNotFoundException("Tarefa de id: "+id+" não foi encontrado."));
     }
 
     public List<Task> findAllByUserId(Long id){
+        this.userService.findById(id);
+
         return this.taskRepository.findByUser_Id(id);   
     }
 
@@ -52,6 +55,7 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id){
+        findById(id);
         this.taskRepository.deleteById(id);
     }
 }

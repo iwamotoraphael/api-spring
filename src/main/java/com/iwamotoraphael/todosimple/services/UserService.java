@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iwamotoraphael.todosimple.models.User;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
 import com.iwamotoraphael.todosimple.repositories.UserRepository;
+import com.iwamotoraphael.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class UserService {
@@ -22,7 +23,7 @@ public class UserService {
     public User findById(Long id){
         Optional<User> user = this.userRepository.findById(id);
 
-        return user.orElseThrow(() -> new RuntimeException("Usuário de id: "+id+" não foi encontrado."));
+        return user.orElseThrow(() -> new ObjectNotFoundException("Usuário de id: "+id+" não foi encontrado."));
     }
 
     @Transactional
@@ -43,6 +44,7 @@ public class UserService {
 
     @Transactional
     public void delete(Long id){
+        findById(id);
         this.taskRepository.deleteByUser_Id(id);
         this.userRepository.deleteById(id);
     }
