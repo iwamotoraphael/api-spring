@@ -1,7 +1,6 @@
 package com.iwamotoraphael.todosimple.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.iwamotoraphael.todosimple.models.Task;
 import com.iwamotoraphael.todosimple.models.User;
+import com.iwamotoraphael.todosimple.models.enums.ProfileEnum;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
+import com.iwamotoraphael.todosimple.security.UserSpringSecurity;
+import com.iwamotoraphael.todosimple.services.exceptions.AuthorizationException;
 import com.iwamotoraphael.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -22,20 +24,28 @@ public class TaskService {
     private UserService userService;
 
     public Task findById(Long id){
-        Optional<Task> task = this.taskRepository.findById(id);
 
-        return task.orElseThrow(() -> new ObjectNotFoundException("Tarefa de id: "+id+" não foi encontrado."));
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+        Task task = this.taskRepository.findById(id)
+        .orElseThrow(() ->  new ObjectNotFoundException("Task with id: "+id+" was not found."));
+
+        if(!userHasTask(task, userSpringSecurity) && !userSpringSecurity.hasRole(ProfileEnum.ADMIN))
+            throw new AuthorizationException("Access denied.");
+    
+        return task;
     }
 
-    public List<Task> findAllByUserId(Long id){
-        this.userService.findById(id);
+    public List<Task> findAllByUser(){
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
-        return this.taskRepository.findByUser_Id(id);   
+        return this.taskRepository.findByUser_Id(userSpringSecurity.getId());   
     }
 
     @Transactional
     public Task create(Task task){
-        User user = this.userService.findById(task.getUser().getId());
+        UserSpringSecurity userSpringSecurity = UserService.authenticated();
+
+        User user = this.userService.findById(userSpringSecurity.getId());
 
         task.setId(null);
         task.setUser(user);
@@ -57,5 +67,9 @@ public class TaskService {
     public void delete(Long id){
         findById(id);
         this.taskRepository.deleteById(id);
+    }
+
+    public Boolean userHasTask(Task task, UserSpringSecurity userSpringSecurity) {
+        return task.getUser().getId().equals(userSpringSecurity.getId());
     }
 }

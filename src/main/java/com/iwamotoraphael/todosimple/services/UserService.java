@@ -1,6 +1,5 @@
 package com.iwamotoraphael.todosimple.services;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
