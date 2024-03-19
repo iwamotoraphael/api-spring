@@ -20,7 +20,7 @@ public enum ProfileEnum {
             return null;
 
         for(ProfileEnum p : ProfileEnum.values()){
-            if(code.equals(p)) return p;
+            if(code.equals(p.getCode())) return p;
         }
 
         throw new IllegalArgumentException("Invalid code: "+code);
