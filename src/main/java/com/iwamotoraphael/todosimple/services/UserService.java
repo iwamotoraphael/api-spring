@@ -33,7 +33,7 @@ public class UserService {
 
     public User findById(Long id){
         UserSpringSecurity userSpringSecurity = authenticated();
-        if(Objects.isNull(userSpringSecurity) || (!userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId())))
+        if(!userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId()))
             throw new AuthorizationException("Access denied.");
 
         Optional<User> user = this.userRepository.findById(id);
@@ -70,7 +70,7 @@ public class UserService {
         try {
             return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         } catch (Exception e) {
-            return null;
+            throw new AuthorizationException("Access denied.");
         }
     }
 }
