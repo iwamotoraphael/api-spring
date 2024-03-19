@@ -1,10 +1,12 @@
 package com.iwamotoraphael.todosimple.services;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,8 @@ import com.iwamotoraphael.todosimple.models.User;
 import com.iwamotoraphael.todosimple.models.enums.ProfileEnum;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
 import com.iwamotoraphael.todosimple.repositories.UserRepository;
+import com.iwamotoraphael.todosimple.security.UserSpringSecurity;
+import com.iwamotoraphael.todosimple.services.exceptions.AuthorizationException;
 import com.iwamotoraphael.todosimple.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -28,6 +32,10 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User findById(Long id){
+        UserSpringSecurity userSpringSecurity = authenticated();
+        if(Objects.isNull(userSpringSecurity) || (!userSpringSecurity.hasRole(ProfileEnum.ADMIN) && !id.equals(userSpringSecurity.getId())))
+            throw new AuthorizationException("Access denied.");
+
         Optional<User> user = this.userRepository.findById(id);
 
         return user.orElseThrow(() -> new ObjectNotFoundException("Usuário de id: "+id+" não foi encontrado."));
@@ -56,6 +64,14 @@ public class UserService {
         findById(id);
         this.taskRepository.deleteByUser_Id(id);
         this.userRepository.deleteById(id);
+    }
+
+    public static UserSpringSecurity authenticated() {
+        try {
+            return (UserSpringSecurity) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
  
