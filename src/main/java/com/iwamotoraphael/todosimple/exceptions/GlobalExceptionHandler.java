@@ -130,9 +130,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
-       response.setStatus(HttpStatus.FORBIDDEN.value());
+       response.setStatus(HttpStatus.UNAUTHORIZED.value());
        response.setContentType("application/json");
-       ErrorResponse errorResponse = new ErrorResponse(HttpStatus.FORBIDDEN.value(), "Username ou senha invalidos.");
+       ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Username ou senha invalidos.");
        response.getWriter().append(errorResponse.toJson());
     }
 

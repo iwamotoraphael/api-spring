@@ -12,7 +12,6 @@ import com.iwamotoraphael.todosimple.models.enums.ProfileEnum;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.agent.builder.AgentBuilder.LocationStrategy.Simple;
 
 @NoArgsConstructor
 @Getter
