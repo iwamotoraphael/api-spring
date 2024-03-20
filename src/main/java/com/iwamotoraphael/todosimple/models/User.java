@@ -44,13 +44,13 @@ public class User {
 
     @Column(name = "username", unique = true, length = 50, nullable = false)
     @NotBlank
-    @Size(min = 6, max = 50)
+    @Size(min = 5, max = 50)
     private String username;
 
     @JsonProperty(access = Access.WRITE_ONLY)
     @Column(name = "password", nullable = false, length = 50)
     @NotBlank
-    @Size(min = 8, max = 50)
+    @Size(min = 8, max = 255)
     private String password;
 
     @OneToMany(mappedBy = "user")

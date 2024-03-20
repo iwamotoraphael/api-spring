@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.iwamotoraphael.todosimple.models.Task;
+import com.iwamotoraphael.todosimple.models.projections.TaskProjection;
 
 public interface TaskRepository extends JpaRepository<Task,Long>{
     
     //Underscore makes the query look for the id within the user
-    List<Task> findByUser_Id(Long id);
+    List<TaskProjection> findByUser_Id(Long id);
 
     void deleteByUser_Id(Long id);
 

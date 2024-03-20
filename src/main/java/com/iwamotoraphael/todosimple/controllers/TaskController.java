@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.iwamotoraphael.todosimple.models.Task;
-import com.iwamotoraphael.todosimple.models.User.UpdateUser;
+import com.iwamotoraphael.todosimple.models.projections.TaskProjection;
 import com.iwamotoraphael.todosimple.services.TaskService;
 
 @RestController
@@ -38,8 +38,8 @@ public class TaskController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Task>> findByUser(){
-        List<Task> tasks = this.taskService.findAllByUser();
+    public ResponseEntity<List<TaskProjection>> findByUser(){
+        List<TaskProjection> tasks = this.taskService.findAllByUser();
 
         return ResponseEntity.ok().body(tasks);
     }
@@ -59,7 +59,6 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateUser.class)
     public ResponseEntity<Void> update(@Valid @RequestBody Task task, @PathVariable Long id) {
         
         task.setId(id);

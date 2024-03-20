@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.iwamotoraphael.todosimple.models.User;
+import com.iwamotoraphael.todosimple.models.dto.UserCreateDTO;
+import com.iwamotoraphael.todosimple.models.dto.UserUpdateDTO;
 import com.iwamotoraphael.todosimple.models.enums.ProfileEnum;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
 import com.iwamotoraphael.todosimple.repositories.UserRepository;
@@ -71,6 +75,20 @@ public class UserService {
         } catch (Exception e) {
             throw new AuthorizationException("Access denied.");
         }
+    }
+
+    public User fromDTO(@Valid UserCreateDTO obj){
+        User user = new User();
+        user.setUsername(obj.getUsername());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
+
+    public User fromDTO(@Valid UserUpdateDTO obj){
+        User user = new User();
+        user.setId(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
     }
 }
  

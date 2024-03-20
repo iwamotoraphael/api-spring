@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.iwamotoraphael.todosimple.models.Task;
 import com.iwamotoraphael.todosimple.models.User;
 import com.iwamotoraphael.todosimple.models.enums.ProfileEnum;
+import com.iwamotoraphael.todosimple.models.projections.TaskProjection;
 import com.iwamotoraphael.todosimple.repositories.TaskRepository;
 import com.iwamotoraphael.todosimple.security.UserSpringSecurity;
 import com.iwamotoraphael.todosimple.services.exceptions.AuthorizationException;
@@ -35,7 +36,7 @@ public class TaskService {
         return task;
     }
 
-    public List<Task> findAllByUser(){
+    public List<TaskProjection> findAllByUser(){
         UserSpringSecurity userSpringSecurity = UserService.authenticated();
 
         return this.taskRepository.findByUser_Id(userSpringSecurity.getId());   

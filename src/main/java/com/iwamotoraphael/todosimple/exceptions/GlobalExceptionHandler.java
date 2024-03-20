@@ -170,7 +170,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler imple
             AuthenticationException exception) throws IOException, ServletException {
        response.setStatus(HttpStatus.UNAUTHORIZED.value());
        response.setContentType("application/json");
-       ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Username ou senha invalidos.");
+       ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Username or password are invalid.");
        response.getWriter().append(errorResponse.toJson());
     }
 
